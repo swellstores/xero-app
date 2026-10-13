@@ -4,10 +4,10 @@
   "fields": [
     {
       "id": "rates",
-      "label": "Tax rates by percentage",
+      "label": "Tax rate choices",
       "type": "collection",
       "description": "For a percentage that Xero has more than one sales tax rate for, or to use another rate than the one Xero has.",
-      "item_label": "tax rate",
+      "item_label": "tax rate choice",
       "fields": [
         {
           "id": "rate",

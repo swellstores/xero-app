@@ -14,7 +14,7 @@ Data flows one way, from Swell to Xero, through the merchant's own Xero custom c
    - **Account for sales**: the code or name of the account item sales are posted to, for example `200`.
    - **Account for shipping**: the account for shipping charges. Empty: the account for sales.
    - **Create credit notes for refunds**: on for new installs.
-5. Under **Tax rates**, name a Xero tax rate for each percentage that Xero has more than one sales tax rate for. Test connection lists them. US organisations name the account for sales tax here.
+5. Under **Tax rates**, name a Xero tax rate for each percentage that Xero has more than one sales tax rate for. Test connection lists them. US organisations name the account for sales tax here instead.
 6. Under **Payments**, enter the account for shop payments, and add a row under **Payment method exceptions** for each method that arrives elsewhere. See "Payments".
 7. Turn on **Send paid orders and refunds to Xero**. Until then nothing is created by itself; the buttons work either way.
 
