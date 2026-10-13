@@ -2,7 +2,7 @@
 	"id": "xero",
 	"name": "Xero",
 	"type": "integration",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Invoices, payments and credit notes in Xero for your orders",
 	"support_email": "support@swell.is",
 	"documentation_url": "https://developers.swell.is/app-guides/xero",
