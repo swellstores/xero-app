@@ -31,7 +31,7 @@
 			"id": "setup",
 			"image_src": "assets/images/4-setup.png",
 			"title": "Set up in minutes",
-			"description": "Enter your Xero custom connection and test it: the organisation's name and what is still missing in the settings come back. Start with drafts."
+			"description": "Enter your Xero custom connection and test it. It names your organisation and what the settings still need."
 		}
 	],
 	"permissions": [
