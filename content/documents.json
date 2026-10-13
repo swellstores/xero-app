@@ -1,0 +1,506 @@
+{
+  "collection": "documents",
+  "label": "Xero documents",
+  "description": "Invoices and credit notes created in Xero, and the ones that could not be created.",
+  "fields": [
+    {
+      "id": "number",
+      "label": "Number",
+      "type": "short_text",
+      "readonly": true
+    },
+    {
+      "id": "type",
+      "label": "Type",
+      "type": "select",
+      "readonly": true,
+      "options": [
+        {
+          "value": "invoice",
+          "label": "Invoice"
+        },
+        {
+          "value": "credit_note",
+          "label": "Credit note"
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "label": "Status",
+      "type": "select",
+      "readonly": true,
+      "options": [
+        {
+          "value": "created",
+          "label": "In Xero"
+        },
+        {
+          "value": "pending",
+          "label": "In progress"
+        },
+        {
+          "value": "failed",
+          "label": "Needs attention"
+        },
+        {
+          "value": "skipped",
+          "label": "Skipped"
+        },
+        {
+          "value": "resolved",
+          "label": "Resolved by hand"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "label": "Total",
+      "type": "number",
+      "digits": 2,
+      "readonly": true
+    },
+    {
+      "id": "currency",
+      "label": "Currency",
+      "type": "short_text",
+      "readonly": true
+    },
+    {
+      "id": "xero_status",
+      "label": "Status in Xero",
+      "type": "select",
+      "readonly": true,
+      "options": [
+        {
+          "value": "draft",
+          "label": "Draft"
+        },
+        {
+          "value": "submitted",
+          "label": "Awaiting approval"
+        },
+        {
+          "value": "authorised",
+          "label": "Awaiting payment"
+        },
+        {
+          "value": "paid",
+          "label": "Paid"
+        },
+        {
+          "value": "voided",
+          "label": "Voided"
+        },
+        {
+          "value": "deleted",
+          "label": "Deleted"
+        }
+      ]
+    },
+    {
+      "id": "booking_note",
+      "label": "Payments",
+      "type": "long_text",
+      "readonly": true
+    },
+    {
+      "id": "date_issued",
+      "label": "Document date",
+      "type": "date",
+      "readonly": true
+    },
+    {
+      "id": "invoice_number",
+      "label": "For invoice",
+      "type": "short_text",
+      "readonly": true
+    },
+    {
+      "id": "order",
+      "label": "Order",
+      "type": "lookup",
+      "model": "orders",
+      "key": "order_id",
+      "readonly": true
+    },
+    {
+      "id": "order_number",
+      "label": "Order",
+      "type": "short_text",
+      "readonly": true
+    },
+    {
+      "id": "customer_name",
+      "label": "Customer",
+      "type": "short_text",
+      "readonly": true
+    },
+    {
+      "id": "customer_email",
+      "label": "Customer e-mail",
+      "type": "short_text",
+      "readonly": true
+    },
+    {
+      "id": "tax_note",
+      "label": "Xero tax rates",
+      "type": "short_text",
+      "readonly": true
+    },
+    {
+      "id": "problem",
+      "label": "Problem",
+      "type": "long_text",
+      "readonly": true
+    },
+    {
+      "id": "attempts",
+      "label": "Attempts",
+      "type": "integer",
+      "readonly": true
+    },
+    {
+      "id": "date_attempted",
+      "label": "Last attempt",
+      "type": "datetime",
+      "readonly": true
+    },
+    {
+      "id": "source",
+      "label": "Started by",
+      "type": "short_text",
+      "readonly": true
+    }
+  ],
+  "views": [
+    {
+      "id": "list",
+      "nav": {
+        "label": "Xero documents",
+        "parent": "orders"
+      },
+      "sort": "date_created desc",
+      "tabs": [
+        {
+          "id": "attention",
+          "label": "Needs attention",
+          "query": {
+            "status": "failed"
+          }
+        },
+        {
+          "id": "created",
+          "label": "In Xero",
+          "query": {
+            "status": "created"
+          }
+        },
+        {
+          "id": "drafts",
+          "label": "Drafts",
+          "query": {
+            "status": "created",
+            "xero_status": {
+              "$in": [
+                "draft",
+                "submitted"
+              ]
+            }
+          }
+        },
+        {
+          "id": "skipped",
+          "label": "Skipped",
+          "query": {
+            "status": "skipped"
+          }
+        }
+      ],
+      "fields": [
+        {
+          "id": "number"
+        },
+        {
+          "id": "type"
+        },
+        {
+          "id": "order_number"
+        },
+        {
+          "id": "customer_name"
+        },
+        {
+          "id": "amount"
+        },
+        {
+          "id": "currency"
+        },
+        {
+          "id": "status"
+        },
+        {
+          "id": "xero_status"
+        },
+        {
+          "id": "problem",
+          "truncated": 60
+        },
+        {
+          "id": "date_created",
+          "label": "Created",
+          "type": "datetime"
+        }
+      ],
+      "actions": [
+        {
+          "id": "open-xero",
+          "label": "Open Xero",
+          "link": "https://go.xero.com",
+          "target": "blank"
+        }
+      ],
+      "bulk_actions": [
+        {
+          "id": "retry-selected",
+          "label": "Retry",
+          "function": "process-documents",
+          "loading_label": "Starting…",
+          "modal": {
+            "title": "Retry the selected documents",
+            "description": "Tries again to create the selected documents in Xero, finishes the ones that were interrupted, and reads drafts again. A document that exists in Xero is never created twice.",
+            "submit_label": "Retry"
+          }
+        },
+        {
+          "id": "approve-selected",
+          "label": "Approve drafts",
+          "function": "process-documents",
+          "loading_label": "Starting…",
+          "modal": {
+            "title": "Approve the selected drafts",
+            "description": "Approves the selected drafts in Xero and records their payments as set under Payments. An approved invoice can no longer be deleted in Xero, only voided. Documents that are not drafts are left as they are.",
+            "submit_label": "Approve"
+          }
+        }
+      ]
+    },
+    {
+      "id": "edit",
+      "fields": [
+        {
+          "type": "field_row",
+          "fields": [
+            {
+              "id": "type",
+              "admin_span": 1
+            },
+            {
+              "id": "number",
+              "admin_span": 1
+            },
+            {
+              "id": "status",
+              "admin_span": 1
+            },
+            {
+              "id": "amount",
+              "admin_span": 1
+            }
+          ]
+        },
+        {
+          "id": "problem",
+          "conditions": {
+            "problem": {
+              "$exists": true,
+              "$ne": null
+            }
+          }
+        },
+        {
+          "type": "field_row",
+          "fields": [
+            {
+              "id": "order",
+              "admin_span": 2
+            },
+            {
+              "id": "customer_name",
+              "admin_span": 2
+            }
+          ]
+        },
+        {
+          "type": "field_row",
+          "fields": [
+            {
+              "id": "xero_status",
+              "admin_span": 1
+            },
+            {
+              "id": "date_issued",
+              "admin_span": 1
+            },
+            {
+              "id": "currency",
+              "admin_span": 1
+            },
+            {
+              "id": "invoice_number",
+              "admin_span": 1,
+              "conditions": {
+                "type": "credit_note"
+              }
+            }
+          ]
+        },
+        {
+          "id": "tax_note",
+          "conditions": {
+            "tax_note": {
+              "$exists": true,
+              "$ne": null
+            }
+          }
+        },
+        {
+          "id": "booking_note",
+          "conditions": {
+            "booking_note": {
+              "$exists": true,
+              "$ne": null
+            }
+          }
+        },
+        {
+          "type": "field_row",
+          "fields": [
+            {
+              "id": "customer_email",
+              "admin_span": 2
+            },
+            {
+              "id": "source",
+              "admin_span": 2
+            }
+          ]
+        },
+        {
+          "type": "field_row",
+          "fields": [
+            {
+              "id": "attempts",
+              "admin_span": 2
+            },
+            {
+              "id": "date_attempted",
+              "admin_span": 2
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "id": "view-in-xero",
+          "label": "View in Xero",
+          "link": "{xero_url}",
+          "target": "blank",
+          "conditions": {
+            "xero_url": {
+              "$exists": true,
+              "$ne": null
+            }
+          }
+        }
+      ],
+      "extra_actions": [
+        {
+          "id": "retry",
+          "label": "Retry",
+          "function": "process-documents",
+          "loading_label": "Trying again…",
+          "hint": "Tries again to create or finish this document in Xero",
+          "conditions": {
+            "status": {
+              "$in": [
+                "failed",
+                "skipped",
+                "pending"
+              ]
+            }
+          }
+        },
+        {
+          "id": "approve",
+          "label": "Approve draft",
+          "function": "process-documents",
+          "loading_label": "Approving…",
+          "hint": "Approves this draft in Xero and records its payments",
+          "conditions": {
+            "status": "created",
+            "xero_status": {
+              "$in": [
+                "draft",
+                "submitted"
+              ]
+            }
+          },
+          "modal": {
+            "title": "Approve draft",
+            "description": "Approves this draft in Xero and records its payments as set under Payments. An approved invoice can no longer be deleted in Xero, only voided.",
+            "submit_label": "Approve"
+          }
+        },
+        {
+          "id": "refresh",
+          "label": "Read again from Xero",
+          "function": "process-documents",
+          "loading_label": "Reading…",
+          "hint": "After you approved this draft in Xero: reads it again and records its payments",
+          "conditions": {
+            "status": "created",
+            "xero_status": {
+              "$in": [
+                "draft",
+                "submitted"
+              ]
+            }
+          }
+        },
+        {
+          "id": "resolve",
+          "label": "Mark as resolved",
+          "function": "resolve-document",
+          "conditions": {
+            "status": {
+              "$in": [
+                "failed",
+                "skipped",
+                "pending"
+              ]
+            }
+          },
+          "modal": {
+            "title": "Mark as resolved",
+            "description": "Use this after you created the document in Xero by hand, or decided that none is needed. The app will not create it and stops listing it under Needs attention.",
+            "submit_label": "Mark as resolved",
+            "fields": [
+              {
+                "id": "number",
+                "label": "Document number in Xero (optional)",
+                "type": "short_text"
+              }
+            ]
+          }
+        },
+        {
+          "id": "open-xero",
+          "label": "Open Xero",
+          "link": "https://go.xero.com",
+          "target": "blank"
+        }
+      ]
+    }
+  ]
+}

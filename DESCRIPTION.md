@@ -1,0 +1,12 @@
+Send your Swell orders to Xero as invoices, with their payments, and your refunds as credit notes. When an order is paid, its invoice is created in Xero for the customer, numbered by Xero, and its payments are recorded on the account you name, so it arrives as paid. When a payment is refunded, a credit note for the same customer is created and the refund is paid out from the same account.
+
+Connect Xero with a custom connection and choose drafts to review in Xero or approved invoices. Each document is listed on its order in Swell, with its number, its status in Xero, what was paid, and a link into Xero.
+
+- **Invoices to the cent.** Each item, shipping and discounts are on the invoice, and its total is what the customer paid. Each line gets the Xero tax rate with the percentage your store charged. US organisations get the order's sales tax as a line of its own.
+- **Payments recorded.** Each payment of an order is recorded on the Xero account you name, usually a clearing account for your payment provider, with its own amount and date. Single payment methods can go to another account, or be left for your bank feed.
+- **Refunds as credit notes.** A full refund repeats the invoice's lines, and a partial refund is split over the invoice's accounts and tax rates. The refund is paid out, or the credit note stays open for you to reconcile.
+- **Drafts or approved invoices.** Start with drafts and approve them in Xero or in Swell, or create approved invoices with their payments at once.
+- **Never created twice.** Each order gets one invoice and each refund one credit note, also when a request is repeated or its answer is lost. Documents that can't be created are listed under Needs attention with the reason, your administrators get an e-mail, and you can retry them one by one or all at once.
+- **Invoices on demand.** Create the invoice for an order from its page, or for selected orders at once, including unpaid orders and orders from before you installed the app.
+
+Setup takes a few minutes. In Xero's developer portal, create a custom connection for your organisation with the scopes listed in the guide. In Swell, enter its client ID and secret, run Test connection, name the accounts for sales and payments, and turn on Send paid orders and refunds to Xero. Custom connections are available to Xero organisations in Australia, New Zealand, the United Kingdom and the United States, and Xero bills them to your organisation every month. Connecting the Xero Demo Company is free.

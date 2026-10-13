@@ -1,0 +1,38 @@
+{
+  "label": "Payments",
+  "description": "The app records each payment of an order in Xero, so approved invoices arrive as paid and refunds as paid out. Name a bank account for shop payments, usually a clearing account for your payment provider, from which you transfer each payout to your bank account. Test connection lists the accounts that take payments. A payment method that arrives elsewhere gets an exception below: another account, or no account to record nothing for it, which is right for bank transfers you reconcile from your bank feed. Gift cards and store credit are recorded only when they have an exception with an account. Leave everything empty to record nothing: invoices then stay open in Xero, to reconcile from your bank feed.",
+  "fields": [
+    {
+      "id": "account",
+      "label": "Account for shop payments",
+      "type": "short_text",
+      "description": "The code or name of a Xero bank account, or of an account with payments enabled. Leave it empty to record nothing.",
+      "placeholder": "The account's code or name in Xero",
+      "admin_span": 2
+    },
+    {
+      "id": "exceptions",
+      "label": "Payment method exceptions",
+      "type": "collection",
+      "description": "For payment methods that do not arrive on the account above. Leave a method's account empty to record nothing for it. Gift cards and store credit are recorded only when they are listed here with an account.",
+      "item_label": "exception",
+      "fields": [
+        {
+          "id": "method",
+          "label": "Payment method ID in Swell",
+          "type": "short_text",
+          "description": "The method's ID in Swell: card, paypal, klarna, amazon, giftcard, account (store credit), or the ID of a manual method under Settings > Payments.",
+          "required": true,
+          "placeholder": "card, paypal, klarna, giftcard, account, or the ID of a manual method"
+        },
+        {
+          "id": "account",
+          "label": "Xero account",
+          "type": "short_text",
+          "description": "Empty: payments by this method are not recorded.",
+          "placeholder": "Leave empty to record nothing for this method"
+        }
+      ]
+    }
+  ]
+}

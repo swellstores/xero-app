@@ -1,0 +1,42 @@
+{
+	"id": "xero",
+	"name": "Xero",
+	"type": "integration",
+	"version": "1.0.0",
+	"description": "Invoices, payments and credit notes in Xero for your orders",
+	"support_email": "support@swell.is",
+	"repository_url": "https://github.com/swellstores/xero-app",
+	"price": 0,
+	"price_external": true,
+	"images": [
+		{
+			"id": "invoices",
+			"image_src": "assets/images/1-invoices.png",
+			"title": "Paid orders, invoiced in Xero",
+			"description": "An invoice is created in Xero when an order is paid, and a credit note when it is refunded."
+		},
+		{
+			"id": "payments",
+			"image_src": "assets/images/2-payments.png",
+			"title": "Invoices that arrive as paid",
+			"description": "Each payment is recorded on the Xero account you name, with the Xero tax rate that matches the tax your store charged."
+		},
+		{
+			"id": "needs-attention",
+			"image_src": "assets/images/3-needs-attention.png",
+			"title": "Nothing lost quietly",
+			"description": "What Xero refuses is listed with the reason. Correct the cause and retry, one by one or all at once."
+		},
+		{
+			"id": "setup",
+			"image_src": "assets/images/4-setup.png",
+			"title": "Set up in minutes",
+			"description": "Enter your Xero custom connection, test it, name the accounts for sales and payments, and start with drafts."
+		}
+	],
+	"permissions": [
+		"read_orders",
+		"read_payments",
+		"read_accounts"
+	]
+}

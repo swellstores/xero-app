@@ -1,0 +1,38 @@
+{
+  "label": "Tax rates",
+  "description": "Each line of an invoice gets the Xero tax rate with the percentage that Swell charged on it. When Xero has several sales tax rates with the same percentage, such as Zero Rated Income and Exempt Income at 0 %, name the one to use here. Test connection says which percentages need it. US organisations: Xero's US sales tax rates cannot be used through the API, so invoices carry the order's sales tax as a line of its own, on the account you name here.",
+  "fields": [
+    {
+      "id": "rates",
+      "label": "Tax rates by percentage",
+      "type": "collection",
+      "description": "For a percentage that Xero has more than one sales tax rate for, or to use another rate than the one Xero has.",
+      "item_label": "tax rate",
+      "fields": [
+        {
+          "id": "rate",
+          "label": "Percentage charged in Swell",
+          "type": "number",
+          "required": true,
+          "placeholder": "For example: 0"
+        },
+        {
+          "id": "tax_rate",
+          "label": "Xero tax rate",
+          "type": "short_text",
+          "description": "The tax rate's name in Xero, or its tax type.",
+          "required": true,
+          "placeholder": "For example: Zero Rated Income"
+        }
+      ]
+    },
+    {
+      "id": "sales_tax_account",
+      "label": "Account for sales tax (US organisations)",
+      "type": "short_text",
+      "description": "US organisations only: the code or name of the Xero account that the order's sales tax line is posted to, usually a liability account for sales tax payable.",
+      "placeholder": "For example: Sales Tax Payable",
+      "admin_span": 2
+    }
+  ]
+}

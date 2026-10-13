@@ -1,0 +1,213 @@
+{
+  "label": "Xero documents",
+  "description": "One record per invoice and per credit note the app creates in Xero, or tried to create. The app uses it to never create a document twice, and to continue one where an attempt stopped.",
+  "name_field": "name",
+  "searches": [
+    {
+      "id": "default",
+      "fields": [
+        "name",
+        "number",
+        "order_number",
+        "customer_name",
+        "customer_email",
+        "invoice_number"
+      ]
+    }
+  ],
+  "fields": {
+    "key": {
+      "type": "string",
+      "label": "Key",
+      "description": "The order or the refund the document belongs to. Unique, so each gets one document.",
+      "required": true,
+      "unique": true,
+      "immutable": true
+    },
+    "type": {
+      "type": "string",
+      "label": "Type",
+      "enum": [
+        "invoice",
+        "credit_note"
+      ],
+      "required": true
+    },
+    "status": {
+      "type": "string",
+      "label": "Status",
+      "enum": [
+        "pending",
+        "created",
+        "failed",
+        "skipped",
+        "resolved"
+      ],
+      "default": "pending"
+    },
+    "source": {
+      "type": "string",
+      "label": "Started by",
+      "description": "The store event or dashboard action that asked for the document."
+    },
+    "name": {
+      "type": "string",
+      "label": "Name",
+      "description": "The document number once Xero has assigned one, the order until then."
+    },
+    "number": {
+      "type": "string",
+      "label": "Number",
+      "description": "The invoice or credit note number Xero assigned."
+    },
+    "invoice_number": {
+      "type": "string",
+      "label": "For invoice",
+      "description": "On a credit note: the invoice it refunds."
+    },
+    "order_id": {
+      "type": "objectid",
+      "label": "Order ID"
+    },
+    "order": {
+      "type": "link",
+      "label": "Order",
+      "model": "orders",
+      "key": "order_id"
+    },
+    "order_number": {
+      "type": "string",
+      "label": "Order"
+    },
+    "account_id": {
+      "type": "objectid",
+      "label": "Customer ID"
+    },
+    "account": {
+      "type": "link",
+      "label": "Customer",
+      "model": "accounts",
+      "key": "account_id"
+    },
+    "payment_id": {
+      "type": "objectid",
+      "label": "Payment ID"
+    },
+    "refund_id": {
+      "type": "objectid",
+      "label": "Refund ID"
+    },
+    "reference": {
+      "type": "string",
+      "label": "Refund reference",
+      "description": "Tells the refunds of one order apart in the credit note's reference."
+    },
+    "customer_name": {
+      "type": "string",
+      "label": "Customer"
+    },
+    "customer_email": {
+      "type": "string",
+      "label": "Customer e-mail"
+    },
+    "amount": {
+      "type": "float",
+      "label": "Total",
+      "scale": 2,
+      "description": "In the document's currency."
+    },
+    "currency": {
+      "type": "string",
+      "label": "Currency"
+    },
+    "tax_note": {
+      "type": "string",
+      "label": "Xero tax rates",
+      "description": "The tax rates the invoice uses, or how sales tax is shown."
+    },
+    "xero_id": {
+      "type": "string",
+      "label": "Xero ID"
+    },
+    "xero_status": {
+      "type": "string",
+      "label": "Status in Xero",
+      "enum": [
+        "draft",
+        "submitted",
+        "authorised",
+        "paid",
+        "voided",
+        "deleted"
+      ],
+      "description": "As it was when the app last read it."
+    },
+    "xero_url": {
+      "type": "string",
+      "label": "Xero link"
+    },
+    "contact_id": {
+      "type": "string",
+      "label": "Xero contact ID"
+    },
+    "contact_key": {
+      "type": "string",
+      "label": "Contact key",
+      "description": "Orders with the same key share one Xero contact."
+    },
+    "payment_method": {
+      "type": "string",
+      "label": "Refunded by",
+      "description": "On a credit note: the payment method of the refund, which decides the Xero account the refund is paid out from."
+    },
+    "booked_amount": {
+      "type": "float",
+      "label": "Paid in Xero",
+      "scale": 2
+    },
+    "booking_note": {
+      "type": "string",
+      "label": "Payments"
+    },
+    "date_booked": {
+      "type": "date",
+      "label": "Payments handled",
+      "description": "Set once the app has dealt with the payments, whether or not anything was recorded."
+    },
+    "problem": {
+      "type": "string",
+      "label": "Problem"
+    },
+    "problem_code": {
+      "type": "string",
+      "label": "Problem code"
+    },
+    "attempts": {
+      "type": "int",
+      "label": "Attempts",
+      "default": 0
+    },
+    "date_attempted": {
+      "type": "date",
+      "label": "Last attempt"
+    },
+    "date_submitted": {
+      "type": "date",
+      "label": "Submitted",
+      "description": "Set while a create request to Xero has no answer yet."
+    },
+    "date_pending": {
+      "type": "date",
+      "label": "Waiting since",
+      "description": "Set while the document waits for Xero. After a day of waiting it is listed under Needs attention."
+    },
+    "date_issued": {
+      "type": "date",
+      "label": "Document date"
+    },
+    "locked_until": {
+      "type": "date",
+      "label": "Locked until"
+    }
+  }
+}

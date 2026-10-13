@@ -1,0 +1,37 @@
+{
+  "label": "Xero alerts",
+  "description": "Open problems that need the merchant: Xero refuses the connection, or documents could not be created. A new record e-mails the store's administrators.",
+  "name_field": "message",
+  "fields": {
+    "key": {
+      "type": "string",
+      "label": "Kind",
+      "description": "connection or documents. Unique, so a problem that repeats updates the same record.",
+      "required": true,
+      "unique": true
+    },
+    "message": {
+      "type": "string",
+      "label": "Problem",
+      "required": true
+    },
+    "subject": {
+      "type": "string",
+      "label": "Met while creating"
+    },
+    "count": {
+      "type": "int",
+      "label": "Times seen",
+      "default": 1
+    },
+    "date_last_seen": {
+      "type": "date",
+      "label": "Last seen"
+    },
+    "app_id": {
+      "type": "string",
+      "label": "App",
+      "description": "The app's record id in this store. The e-mail links to the app's pages with it."
+    }
+  }
+}

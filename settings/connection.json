@@ -1,0 +1,56 @@
+{
+  "label": "Connection",
+  "description": "Connect your Xero organisation with a custom connection. In Xero's developer portal (developer.xero.com, My Apps), create a Custom connection app with the scopes accounting.contacts, accounting.invoices, accounting.payments and accounting.settings.read, and send it to a user who can authorise it for your organisation. Once it is authorised, copy the Client id and generate a Client secret on the app's page, paste both here and save.",
+  "fields": [
+    {
+      "id": "client_id",
+      "label": "Client ID",
+      "type": "short_text",
+      "admin_span": 2
+    },
+    {
+      "id": "client_secret",
+      "label": "Client secret",
+      "type": "secret",
+      "admin_span": 2
+    },
+    {
+      "id": "organisation",
+      "label": "Connected organisation",
+      "type": "short_text",
+      "description": "Filled in by Test connection.",
+      "admin_span": 2,
+      "readonly": true,
+      "placeholder": "Not tested yet"
+    },
+    {
+      "id": "test-connection",
+      "label": "Test connection",
+      "type": "action",
+      "function": "test-connection",
+      "loading_label": "Testing…",
+      "hint": "Checks the saved client ID and secret with Xero and shows how the accounts, tax rates and payments are set up"
+    },
+    {
+      "id": "enabled",
+      "label": "Send paid orders and refunds to Xero",
+      "type": "toggle",
+      "description": "While this is on, an invoice is created in Xero when an order is paid, and a credit note when a payment is refunded.",
+      "default": false
+    }
+  ],
+  "actions": [
+    {
+      "id": "retry-failed",
+      "label": "Retry failed documents",
+      "function": "process-documents",
+      "loading_label": "Starting…",
+      "hint": "Tries again to create every document listed under Needs attention",
+      "modal": {
+        "title": "Retry failed documents",
+        "description": "Tries again to create every invoice and credit note that is listed under Orders > Xero documents > Needs attention, and finishes the ones that were interrupted. Use it after you corrected what stopped them, for example the connection or an account. A document that exists in Xero is never created twice.",
+        "submit_label": "Retry"
+      }
+    }
+  ]
+}

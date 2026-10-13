@@ -1,0 +1,18 @@
+{
+  "collection": "alerts",
+  "label": "Xero needs attention",
+  "description": "Tells the store's administrators that Xero refuses the connection, or that invoices or credit notes could not be created. One e-mail per incident, not one per order.",
+  "method": "email",
+  "admin": true,
+  "event": "created",
+  "new": true,
+  "subject": "Action needed: {% if key == 'connection' %}Xero is not accepting documents from {{ store.name }}{% else %}a Xero document for {{ store.name }} could not be created{% endif %}",
+  "sample": {
+    "key": "documents",
+    "message": "Xero has several sales tax rates of 0 %: Zero Rated Income, Exempt Income, No VAT. Name the one to use for 0 % under Tax rates in the app's settings, then retry.",
+    "subject": "Invoice for order 1042",
+    "count": 1,
+    "date_last_seen": "2026-10-10T12:00:00.000Z",
+    "app_id": "000000000000000000000000"
+  }
+}

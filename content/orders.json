@@ -1,0 +1,160 @@
+{
+  "collection": "orders",
+  "fields": [
+    {
+      "id": "documents",
+      "type": "collection",
+      "label": "Xero documents",
+      "link": {
+        "params": {
+          "order_id": "id"
+        }
+      },
+      "collection": "documents",
+      "fields": [
+        {
+          "id": "type",
+          "label": "Type",
+          "type": "select",
+          "readonly": true,
+          "options": [
+            {
+              "value": "invoice",
+              "label": "Invoice"
+            },
+            {
+              "value": "credit_note",
+              "label": "Credit note"
+            }
+          ]
+        },
+        {
+          "id": "number",
+          "label": "Number",
+          "type": "short_text",
+          "readonly": true
+        },
+        {
+          "id": "amount",
+          "label": "Total",
+          "type": "number",
+          "digits": 2,
+          "readonly": true
+        },
+        {
+          "id": "status",
+          "label": "Status",
+          "type": "select",
+          "readonly": true,
+          "options": [
+            {
+              "value": "created",
+              "label": "In Xero"
+            },
+            {
+              "value": "pending",
+              "label": "In progress"
+            },
+            {
+              "value": "failed",
+              "label": "Needs attention"
+            },
+            {
+              "value": "skipped",
+              "label": "Skipped"
+            },
+            {
+              "value": "resolved",
+              "label": "Resolved by hand"
+            }
+          ]
+        },
+        {
+          "id": "xero_status",
+          "label": "Status in Xero",
+          "type": "select",
+          "readonly": true,
+          "options": [
+            {
+              "value": "draft",
+              "label": "Draft"
+            },
+            {
+              "value": "submitted",
+              "label": "Awaiting approval"
+            },
+            {
+              "value": "authorised",
+              "label": "Awaiting payment"
+            },
+            {
+              "value": "paid",
+              "label": "Paid"
+            },
+            {
+              "value": "voided",
+              "label": "Voided"
+            },
+            {
+              "value": "deleted",
+              "label": "Deleted"
+            }
+          ]
+        },
+        {
+          "id": "problem",
+          "label": "Problem",
+          "type": "long_text",
+          "readonly": true
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "id": "list",
+      "bulk_actions": [
+        {
+          "id": "invoice-selected",
+          "label": "Create Xero invoices",
+          "function": "process-documents",
+          "loading_label": "Starting…",
+          "modal": {
+            "title": "Create Xero invoices",
+            "description": "Creates an invoice in Xero for each selected order that has none yet, paid or not. An order that already has one gets no second one; a payment that came after its invoice is recorded on it. The results appear under Orders > Xero documents.",
+            "submit_label": "Create invoices"
+          }
+        }
+      ],
+      "fields": []
+    },
+    {
+      "id": "edit",
+      "extra_actions": [
+        {
+          "id": "create-invoice",
+          "label": "Create Xero invoice",
+          "function": "process-documents",
+          "loading_label": "Creating invoice…",
+          "hint": "Creates the invoice for this order in Xero now. If it has one, records a payment that came after it",
+          "modal": {
+            "title": "Create Xero invoice",
+            "description": "Creates the invoice for this order in Xero now, whether or not the order is paid. If the order already has one, no second one is created; a payment that came after the invoice is recorded on it.",
+            "submit_label": "Create invoice"
+          }
+        }
+      ],
+      "tabs": [
+        {
+          "id": "xero",
+          "label": "Xero",
+          "fields": [
+            {
+              "id": "documents"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

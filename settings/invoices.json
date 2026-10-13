@@ -1,0 +1,47 @@
+{
+  "label": "Invoices",
+  "description": "How invoices and credit notes are created. An approved invoice gets its payments recorded at once. A draft can still be edited or deleted in Xero: approve it there or in Swell, and the payments follow. Start with drafts. Invoice numbers, the layout and the branding come from your Xero organisation.",
+  "fields": [
+    {
+      "id": "status",
+      "label": "Create invoices as",
+      "type": "select",
+      "description": "Approved invoices get their payments recorded at once. Drafts wait for you to approve them in Xero or in Swell. Credit notes are created the same way.",
+      "options": [
+        {
+          "value": "draft",
+          "label": "Drafts, to review and approve"
+        },
+        {
+          "value": "authorised",
+          "label": "Approved invoices, with their payments"
+        }
+      ],
+      "default": "draft",
+      "admin_span": 2
+    },
+    {
+      "id": "sales_account",
+      "label": "Account for sales",
+      "type": "short_text",
+      "description": "The code or name of the Xero account that item sales are posted to.",
+      "placeholder": "For example: 200",
+      "admin_span": 2
+    },
+    {
+      "id": "shipping_account",
+      "label": "Account for shipping",
+      "type": "short_text",
+      "description": "The code or name of the Xero account that shipping charges are posted to. Leave it empty to use the account for sales.",
+      "placeholder": "Leave empty to use the account for sales",
+      "admin_span": 2
+    },
+    {
+      "id": "credit_notes",
+      "label": "Create credit notes for refunds",
+      "type": "toggle",
+      "description": "Each refund of an order that has a Xero invoice becomes a credit note for the same customer.",
+      "default": true
+    }
+  ]
+}

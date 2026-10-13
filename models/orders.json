@@ -1,0 +1,14 @@
+{
+  "description": "Adds the order's Xero documents as a link, so they can be shown on the order and expanded through the API. Nothing is stored on the order.",
+  "fields": {
+    "documents": {
+      "type": "link",
+      "label": "Xero documents",
+      "model": "documents",
+      "value_type": "collection",
+      "params": {
+        "order_id": "id"
+      }
+    }
+  }
+}
