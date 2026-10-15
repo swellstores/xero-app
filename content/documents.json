@@ -231,7 +231,8 @@
           "id": "customer_name"
         },
         {
-          "id": "amount"
+          "id": "amount",
+          "type": "currency"
         },
         {
           "id": "currency"

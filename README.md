@@ -11,7 +11,7 @@ Data flows one way, from Swell to Xero, through the merchant's own Xero custom c
 3. In Swell, open Apps > Xero > Settings, enter **Client ID** and **Client secret**, save, and press **Test connection**. It fills in **Connected organisation**, and says how invoices are created and how the accounts, tax rates and payment settings match the organisation.
 4. Under **Invoices**, choose:
    - **Create invoices as**: drafts or approved invoices. New installs create drafts.
-   - **Account for sales**: the code or name of the account item sales are posted to, for example `200`.
+   - **Account for sales**: the code or name of the account item sales are posted to, for example `Sales`.
    - **Account for shipping**: the account for shipping charges. Empty: the account for sales.
    - **Create credit notes for refunds**: on for new installs.
 5. Under **Tax rates**, name a Xero tax rate for each percentage that Xero has more than one sales tax rate for. Test connection lists them. US organisations name the account for sales tax here instead.
