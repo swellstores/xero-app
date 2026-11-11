@@ -24,6 +24,7 @@
       "id": "sales_account",
       "label": "Account for sales",
       "type": "short_text",
+      "required": true,
       "description": "The code or name of the Xero account that item sales are posted to.",
       "placeholder": "For example: Sales",
       "admin_span": 2

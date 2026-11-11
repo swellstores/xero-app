@@ -1,17 +1,19 @@
 {
   "label": "Connection",
-  "description": "Connect your Xero organisation with a custom connection. In Xero's developer portal (developer.xero.com, My Apps), create a Custom connection app with the scopes accounting.contacts, accounting.invoices, accounting.payments and accounting.settings.read, and send it to a user who can authorise it for your organisation. Once it is authorised, copy the Client id and generate a Client secret on the app's page, paste both here and save.",
+  "description": "Connect your Xero organisation with a custom connection. In Xero's developer portal (developer.xero.com, My Apps), create a Custom connection app with the scopes accounting.contacts, accounting.invoices, accounting.payments and accounting.settings.read, and send it to a user who can authorise it for your organisation. Once it is authorised, copy the Client id and generate a Client secret on the app's page, paste both here, save, and choose Test connection.",
   "fields": [
     {
       "id": "client_id",
       "label": "Client ID",
       "type": "short_text",
+      "required": true,
       "admin_span": 2
     },
     {
       "id": "client_secret",
       "label": "Client secret",
       "type": "secret",
+      "required": true,
       "admin_span": 2
     },
     {
