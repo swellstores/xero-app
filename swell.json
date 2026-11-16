@@ -7,8 +7,6 @@
 	"support_email": "support@swell.is",
 	"documentation_url": "https://developers.swell.is/app-guides/xero",
 	"repository_url": "https://github.com/swellstores/xero-app",
-	"price": 0,
-	"price_external": true,
 	"images": [
 		{
 			"id": "invoices",
