@@ -154,6 +154,7 @@ export function createStore(
     documents: collections.documents,
     alerts: collections.alerts,
     payments: collections.payments,
+    orders,
     runs,
     events,
     failures,

@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import bookPayment from "../../functions/book-payment";
 import creditRefund from "../../functions/credit-refund";
 import invoiceOrder from "../../functions/invoice-order";
+import invoicePlaced from "../../functions/invoice-placed";
 import ProcessDocuments from "../../functions/process-documents";
 import resolveDocument from "../../functions/resolve-document";
 import sweep from "../../functions/sweep";
@@ -117,6 +119,71 @@ describe("order.paid", () => {
     await invoiceOrder(request({ ...order }));
     expect(store.documents).toHaveLength(1);
     expect(store.runs).toHaveLength(1);
+  });
+});
+
+describe("orders invoiced unpaid", () => {
+  const terms = {
+    ...order,
+    paid: false,
+    billing: { ...order.billing, method: "net_terms" },
+    $app: { wholesale_desk: { terms: true, date_due: "2026-11-12T22:30:00.000Z", po_number: "PO-4471" } },
+  };
+  const WITH_TERMS = { ...SETTINGS, invoices: { ...SETTINGS.invoices, unpaid_methods: ["net_terms"] } };
+
+  beforeEach(() => {
+    store.payments.length = 0;
+    store.orders.set(ORDER_ID, terms);
+  });
+
+  it("invoices nothing when the order is placed, while no method is named", async () => {
+    expect(await invoicePlaced(request(terms))).toMatchObject({ skipped: expect.any(String) });
+    store.payments.push({ id: "pay-2", order_id: ORDER_ID, method: "net_terms", amount: 20, success: true });
+    expect(await bookPayment(request(store.payments[0]))).toMatchObject({ skipped: expect.any(String) });
+    expect(store.documents).toHaveLength(0);
+    expect(store.runs).toHaveLength(0);
+  });
+
+  it("invoices an order placed with a named method, unpaid, with its due date and PO number", async () => {
+    store.setSettings(WITH_TERMS);
+    expect(await invoicePlaced(request({ ...terms, billing: { method: "card" } }))).toMatchObject({ skipped: expect.any(String) });
+    expect(await invoicePlaced(request({ ...terms, paid: true }))).toMatchObject({ skipped: expect.any(String) });
+
+    await invoicePlaced(request(terms));
+    expect(store.documents).toMatchObject([{ key: `invoice:${ORDER_ID}`, source: "order.submitted" }]);
+    expect(await runStarted()).toMatchObject([{ result: "created", number: "INV-0001" }]);
+    // 22:30 UTC on the 12th is the 13th in Auckland
+    expect(xero.invoices[0]).toMatchObject({ Reference: "1001 / PO PO-4471", DueDate: "2026-11-13", Status: "AUTHORISED" });
+    expect(store.documents[0]).toMatchObject({ status: "created", xero_status: "authorised", booked_amount: 0 });
+  });
+
+  it("gives an order without a due date the organisation's sales terms, as before", async () => {
+    store.setSettings(WITH_TERMS);
+    const plain = { ...terms, $app: {} };
+    store.orders.set(ORDER_ID, plain);
+    await invoicePlaced(request(plain));
+    await runStarted();
+    expect(xero.invoices[0]).toMatchObject({ Reference: "1001", DueDate: "2026-11-20" });
+  });
+
+  it("records each payment as it arrives, and the rest when the order is paid, on the one invoice", async () => {
+    store.setSettings(WITH_TERMS);
+    await invoicePlaced(request(terms));
+    await runStarted();
+
+    store.payments.push({ id: "pay-2", order_id: ORDER_ID, method: "net_terms", amount: 20, success: true, date_created: "2026-10-20T01:00:00.000Z" });
+    await bookPayment(request(store.payments[0]));
+    expect(await runStarted()).toMatchObject([{ result: "created" }]);
+    expect(store.documents[0]).toMatchObject({ booked_amount: 20, xero_status: "authorised" });
+
+    store.payments.push({ id: "pay-3", order_id: ORDER_ID, method: "net_terms", amount: 31.75, success: true, date_created: "2026-10-27T01:00:00.000Z" });
+    store.orders.set(ORDER_ID, { ...terms, paid: true });
+    await bookPayment(request(store.payments[1]));
+    await invoiceOrder(request({ ...terms, paid: true }));
+    await runStarted();
+    expect(store.documents[0]).toMatchObject({ booked_amount: 51.75, xero_status: "paid" });
+    expect(xero.invoices).toHaveLength(1);
+    expect(xero.payments.map((payment) => payment.Amount)).toEqual([20, 31.75]);
   });
 });
 
