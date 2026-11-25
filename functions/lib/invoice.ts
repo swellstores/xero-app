@@ -54,6 +54,8 @@ export interface BuiltInvoice {
   totalCents: number;
   currency: string;
   reference: string;
+  /** The due date agreed with the customer, when the order names one (ISO) */
+  dateDue?: string;
   contact: ContactInput;
   /** Orders with the same key share one Xero contact */
   contactKey: string;
@@ -367,6 +369,18 @@ function readRecipient(order: SwellRecord) {
   return { person, company, email, phone, source };
 }
 
+/**
+ * Payment terms another app wrote on the order, by a documented convention: Wholesale Desk
+ * keeps the due date and the buyer's PO number in `$app.wholesale_desk`. Absent, or not
+ * readable, they are ignored.
+ */
+export function readTerms(order: SwellRecord): { dateDue?: string; poNumber?: string } {
+  const terms: SwellRecord = order.$app?.wholesale_desk || {};
+  const dateDue = typeof terms.date_due === "string" && Number.isFinite(Date.parse(terms.date_due)) ? terms.date_due : undefined;
+  const poNumber = typeof terms.po_number === "string" ? terms.po_number.replace(/\s+/g, " ").trim() : "";
+  return { ...(dateDue ? { dateDue } : {}), ...(poNumber ? { poNumber } : {}) };
+}
+
 /** What rules an order out before Xero is asked anything */
 export function checkOrder(order: SwellRecord): void {
   if (order.draft) {
@@ -445,13 +459,16 @@ export function buildInvoice(order: SwellRecord, options: BuildOptions): BuiltIn
     ...(recipient.company && recipient.person ? { AttentionTo: recipient.person } : {}),
   };
   const number = String(order.number || order.id);
+  const terms = readTerms(order);
 
   return {
     layout,
     ...(fallback ? { fallback } : {}),
     totalCents,
     currency,
-    reference: number,
+    // Xero's Reference holds one value: the order number, and the PO number beside it
+    reference: (terms.poNumber ? `${number} / PO ${terms.poNumber}` : number).slice(0, 255),
+    ...(terms.dateDue ? { dateDue: terms.dateDue } : {}),
     contact: {
       Name: customerName,
       ...(recipient.person ? splitName(recipient.person) : {}),

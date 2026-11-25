@@ -23,7 +23,7 @@
 
 import { raiseAlert, settleAlerts } from "./alerts";
 import { buildCreditNote } from "./credit-note";
-import { dueDate, xeroDay, zoneOf } from "./dates";
+import { dayOf, dueDate, xeroDay, zoneOf } from "./dates";
 import { claim, creditNoteKey, describe, findByKey, invoiceKey, provisionalName, save, take } from "./documents";
 import type { DocumentRecord, XeroStatus } from "./documents";
 import { buildInvoice, checkOrder, toLineItem } from "./invoice";
@@ -360,9 +360,12 @@ async function createInvoice(ctx: Context, doc: DocumentRecord): Promise<XeroDoc
 
   const contactId = await ensureContact(ctx, doc, built);
   const org = await organisation(ctx);
-  const date = xeroDay(order.date_created, zoneOf(org.timezone));
-  // A paid order is due on its date. An unpaid one gets the organisation's sales terms
-  const due = order.paid ? date : dueDate(date, org.salesTerms);
+  const zone = zoneOf(org.timezone);
+  const date = xeroDay(order.date_created, zone);
+  // A due date the order names comes first, never before the invoice's date. Otherwise a paid
+  // order is due on its date, and an unpaid one gets the organisation's sales terms
+  const agreed = built.dateDue && dayOf(built.dateDue, zone);
+  const due = agreed ? (agreed < date ? date : agreed) : order.paid ? date : dueDate(date, org.salesTerms);
   const details: Partial<DocumentRecord> = {
     ...orderDetails(order),
     customer_name: built.customerName,

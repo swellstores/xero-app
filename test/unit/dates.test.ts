@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dueDate, xeroDay, zoneOf } from "../../functions/lib/dates";
+import { dayOf, dueDate, xeroDay, zoneOf } from "../../functions/lib/dates";
 
 describe("dates", () => {
   it("takes the day in the organisation's time zone", () => {
@@ -16,5 +16,13 @@ describe("dates", () => {
     expect(dueDate("2026-10-13", { day: 7, type: "DAYSAFTERBILLMONTH" })).toBe("2026-11-07");
     expect(dueDate("2026-10-13", { day: 25, type: "OFCURRENTMONTH" })).toBe("2026-10-25");
     expect(dueDate("2026-10-28", { day: 25, type: "OFCURRENTMONTH" })).toBe("2026-10-28");
+  });
+});
+
+describe("dayOf", () => {
+  it("takes a bare day as it is, and a moment as its day in the zone", () => {
+    expect(dayOf("2026-11-12", "Pacific/Auckland")).toBe("2026-11-12");
+    expect(dayOf("2026-11-12T22:30:00.000Z", "Pacific/Auckland")).toBe("2026-11-13");
+    expect(dayOf("2026-11-12T22:30:00.000Z", "UTC")).toBe("2026-11-12");
   });
 });

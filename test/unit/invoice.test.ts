@@ -42,6 +42,17 @@ describe("buildInvoice", () => {
     expect(built.reference).toBe("1001");
   });
 
+  it("puts a PO number from Wholesale Desk beside the order number, and keeps its due date", () => {
+    const terms = { date_due: "2026-11-12T22:30:00.000Z", po_number: " PO-77\n12 " };
+    const built = buildInvoice({ ...orders.simple, $app: { wholesale_desk: terms } }, options());
+    expect(built.reference).toBe("1001 / PO PO-77 12");
+    expect(built.dateDue).toBe("2026-11-12T22:30:00.000Z");
+    // Absent or unreadable, they are ignored
+    const plain = buildInvoice({ ...orders.simple, $app: { wholesale_desk: { date_due: "soon", po_number: 7 } } }, options());
+    expect(plain.reference).toBe("1001");
+    expect(plain.dateDue).toBeUndefined();
+  });
+
   it("switches to amounts including tax when Xero's per-line rounding would be a cent off", () => {
     const built = buildInvoice(orders.oddCents, options());
     expect(built.layout.lineAmountTypes).toBe("Inclusive");

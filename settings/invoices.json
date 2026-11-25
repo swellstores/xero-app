@@ -38,6 +38,14 @@
       "admin_span": 2
     },
     {
+      "id": "unpaid_methods",
+      "label": "Also invoice unpaid orders paid with these payment methods",
+      "type": "tags",
+      "description": "The IDs of manual payment methods under Settings > Payments, such as a method for payment terms. An order paid with one of them is invoiced when it is placed, not when it is paid, and its payments are recorded on the invoice as they arrive. Leave it empty to invoice orders when they are paid.",
+      "placeholder": "For example: net_terms",
+      "admin_span": 2
+    },
+    {
       "id": "credit_notes",
       "label": "Create credit notes for refunds",
       "type": "toggle",

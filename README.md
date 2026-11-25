@@ -13,6 +13,7 @@ Data flows one way, from Swell to Xero, through the merchant's own Xero custom c
    - **Create invoices as**: drafts or approved invoices. New installs create drafts.
    - **Account for sales**: the code or name of the account item sales are posted to, for example `Sales`.
    - **Account for shipping**: the account for shipping charges. Empty: the account for sales.
+   - **Also invoice unpaid orders paid with these payment methods**: the IDs of manual payment methods whose orders are invoiced when they are placed. Empty: every order is invoiced when it is paid. See "Orders on payment terms".
    - **Create credit notes for refunds**: on for new installs.
 5. Under **Tax rates**, name a Xero tax rate for each percentage that Xero has more than one sales tax rate for. Test connection lists them. US organisations name the account for sales tax here instead.
 6. Under **Payments**, enter the account for shop payments, and add a row under **Payment method exceptions** for each method that arrives elsewhere. See "Payments".
@@ -26,10 +27,11 @@ Settings are separate for the store's test and live environments, and both start
 | --- | --- |
 | An order becomes paid | An invoice, and a payment for each of the order's payments |
 | A payment of an invoiced order is refunded, in part or in full | A credit note for the invoice's contact, and the refund paid out |
+| An order is placed with a payment method named under **Also invoice unpaid orders paid with these payment methods** | An unpaid invoice, which gets each payment as it arrives |
 | A customer's first order | A contact. Later orders use it again |
 | **Create Xero invoice** on an order, or **Create Xero invoices** on selected orders | An invoice, paid or not |
 
-**The invoice.** For the customer's contact, dated the day the order was placed in the organisation's time zone. The order number is in Xero's Reference field. One line per order item with its quantity and unit price, and a discount on the line it belongs to; one line for shipping. Xero numbers the invoice, and the layout and branding are the organisation's. A paid order's invoice is due on its date. An unpaid order's invoice gets the organisation's sales payment terms.
+**The invoice.** For the customer's contact, dated the day the order was placed in the organisation's time zone. The order number is in Xero's Reference field. One line per order item with its quantity and unit price, and a discount on the line it belongs to; one line for shipping. Xero numbers the invoice, and the layout and branding are the organisation's. A paid order's invoice is due on its date. An unpaid order's invoice gets the organisation's sales payment terms. An order that names a due date and a PO number keeps them: see "Orders on payment terms".
 
 **Tax.** Each line gets the Xero sales tax rate with the percentage the store charged on it: the one active rate with that percentage, or the one named under Tax rates. When Xero has several, or none, the document waits under Needs attention until one is named. Xero calculates the tax from the rate. A store with prices before tax gets a tax-exclusive invoice when Xero's per-line rounding gives the order's total; otherwise the lines are sent with tax included, so the total is always the order's.
 
@@ -50,6 +52,16 @@ Xero records a payment on a bank account, or on an account with "Enable payments
 - With no account at all, nothing is recorded and invoices stay awaiting payment in Xero.
 
 Payments are recorded only on approved invoices. A draft gets its payments when it is approved.
+
+## Orders on payment terms
+
+Business customers who pay later, by bank transfer within 30 days for example, check out with a manual payment method under Settings > Payments. Add its ID under **Also invoice unpaid orders paid with these payment methods**, and such orders are invoiced when they are placed, unpaid, instead of when they are paid.
+
+- **Due date.** When the order names one in `$app.wholesale_desk.date_due`, the invoice is due on that day in the organisation's time zone, and never before the invoice's date. Otherwise it gets the organisation's sales payment terms.
+- **PO number.** When the order names one in `$app.wholesale_desk.po_number`, Xero's Reference holds both: `1001 / PO 4471`.
+- **Payments.** Each payment recorded on the order in Swell, in part or in full, is recorded on the invoice as it arrives, on the account its payment method has under Payments. Leave the terms method without an account under **Payment method exceptions** to reconcile the transfers from the bank feed instead.
+
+The Wholesale Desk app writes `date_due` and `po_number` on its orders. Any app or integration can write the same two fields to an order; orders without them are invoiced as before.
 
 ## Drafts and approved invoices
 

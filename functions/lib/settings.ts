@@ -17,6 +17,8 @@ export interface Settings {
     /** Code or name of the Xero account for shipping. Empty: the sales account */
     shipping_account?: string | null;
     credit_notes?: boolean | null;
+    /** Manual payment methods whose orders are invoiced when placed, unpaid */
+    unpaid_methods?: string[] | null;
   };
   taxes?: {
     /** Xero tax rates for the rates charged in Swell, where matching by rate is not enough */
@@ -47,6 +49,13 @@ export function approves(settings: Settings): boolean {
 
 export function creditNotesEnabled(settings: Settings): boolean {
   return settings.invoices?.credit_notes !== false;
+}
+
+/** True for an order whose payment method the settings invoice before it is paid */
+export function invoicedUnpaid(settings: Settings, order: Record<string, any> | undefined): boolean {
+  const method = (order?.billing?.method || "").trim();
+  const methods = Array.isArray(settings.invoices?.unpaid_methods) ? settings.invoices.unpaid_methods : [];
+  return Boolean(method) && methods.some((wanted) => String(wanted || "").trim() === method);
 }
 
 export function credentials(settings: Settings): { clientId: string; clientSecret: string } {

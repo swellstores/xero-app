@@ -66,6 +66,11 @@ export function xeroDay(value: Date | string | undefined | null, zone: string): 
   return `${parts.year}-${parts.month}-${parts.day}`;
 }
 
+/** The day of a date or a moment: a bare YYYY-MM-DD is that day, a moment is its day in the zone */
+export function dayOf(value: string, zone: string): string {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : xeroDay(value, zone);
+}
+
 /** Adds days to a YYYY-MM-DD day */
 export function addDays(day: string, days: number): string {
   const date = new Date(`${day}T00:00:00.000Z`);
