@@ -3,7 +3,11 @@ import { WORKFLOW } from "./lib/start";
 
 export const config: SwellConfig = {
   description: "Every hour: start a run for documents that are still waiting for Xero",
-  cron: { schedule: "50 * * * *" },
+  cron: {
+    schedule: "50 * * * *",
+    // Skipped while the app is switched off
+    conditions: { $settings: { connection: { enabled: true } } },
+  },
 };
 
 // A run retries a document for some minutes by itself. Only what has had no attempt for
