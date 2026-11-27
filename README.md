@@ -86,7 +86,7 @@ The buttons start a run in the background. Through the API, an order's documents
 
 | What happens | What the app does |
 | --- | --- |
-| Xero is down, offline for maintenance, or limits the calls | The run tries again for about ten minutes. After that the document is tried again every half hour, for a day. Then it is listed under Needs attention |
+| Xero is down, offline for maintenance, or limits the calls | The run tries again for about ten minutes. After that the document is tried again every hour, for a day. Then it is listed under Needs attention |
 | An answer from Xero is lost | The request is sent again with the same idempotency key, and the app looks for its draft by the reference before it creates another. Before recording a payment it reads the payments it recorded on the invoice before, which carry the reference "Swell order", and records no more than is due |
 | The same event arrives twice | The second one finds the document's record and continues it, or finds nothing left to do |
 | Xero refuses the client ID and secret, or the connection lacks a scope | Affected documents are listed under Needs attention. The store's administrators get one e-mail. After the connection is fixed, **Retry failed documents** creates them |
