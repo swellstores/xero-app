@@ -102,3 +102,7 @@ npm run typecheck
 ```
 
 The tests run against a small fake of Xero (`test/helpers/xero.ts`) and of the store API (`test/helpers/store.ts`).
+
+## License
+
+MIT. See [LICENSE](LICENSE). Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
